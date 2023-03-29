@@ -1,0 +1,45 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  ci:
+    name: CI
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout 🚪
+        uses: actions/checkout@v3
+
+      - name: Setup node 🍀
+        uses: actions/setup-node@v3
+        with:
+          node-version-file: '.nvmrc'
+          cache: 'yarn'
+
+      - name: Install dependencies 📦
+        run: yarn install --frozen-lockfile
+
+      - name: Install Playwright browsers 🕹️
+        run: npx playwright install --with-deps
+
+      - name: GraphQL Codegen 🕸
+        run: yarn codegen
+
+      - name: Typecheck 🔡
+        run: yarn typecheck
+
+      - name: Lint 🪩
+        run: yarn lint
+
+      - name: Prettier ✨
+        run: yarn prettier
+
+      - name: Build 🎁
+        run: yarn build
+
+      - name: Run Tests 🧪
+        run: yarn test:e2e

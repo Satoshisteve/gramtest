@@ -1,0 +1,19 @@
+{
+  "name": "data",
+  "version": "0.0.0",
+  "main": "index.ts",
+  "license": "GPL-3.0",
+  "scripts": {
+    "typecheck": "tsc --pretty --noEmit",
+    "lint": "eslint . --ext .ts",
+    "lint:fix": "eslint . --fix --ext .ts"
+  },
+  "dependencies": {
+    "typescript": "^5.0.2"
+  },
+  "devDependencies": {
+    "@types/node": "^18.15.10",
+    "eslint-config-weblint": "*",
+    "tsconfig": "*"
+  }
+}
