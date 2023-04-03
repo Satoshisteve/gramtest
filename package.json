@@ -36,8 +36,10 @@
   },
   "packageManager": "yarn@1.22.19",
   "dependencies": {
+    "@lens-protocol/sdk-gated": "^1.2.0",
     "node": "^19.8.1",
     "nvm": "^0.0.4",
+    "turbo-react": "^0.8.3",
     "yarn": "^1.22.19"
   }
 }
