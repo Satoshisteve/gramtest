@@ -23,6 +23,7 @@ import { t, Trans } from '@lingui/macro';
 import axios from 'axios';
 import clsx from 'clsx';
 import { LIT_PROTOCOL_ENVIRONMENT, POLYGONSCAN_URL, RARIBLE_URL } from 'data/constants';
+import { providers } from 'ethers';
 import type { Publication, PublicationMetadataV2Input } from 'lens';
 import { DecryptFailReason, useCanDecryptStatusQuery } from 'lens';
 import formatHandle from 'lib/formatHandle';
@@ -146,7 +147,7 @@ const DecryptedPublicationBody: FC<DecryptedPublicationBodyProps> = ({ encrypted
     setIsDecrypting(true);
     const contentUri = sanitizeDStorageUrl(encryptedPublication?.onChainContentURI);
     const { data } = await axios.get(contentUri);
-    const sdk = await LensGatedSDK.create({ provider, signer, env: LIT_PROTOCOL_ENVIRONMENT as any });
+    const sdk = await LensGatedSDK.create({ providers, signer, env: LIT_PROTOCOL_ENVIRONMENT as any });
     const { decrypted, error } = await sdk.gated.decryptMetadata(data);
     setDecryptedData(decrypted);
     setDecryptError(error);
