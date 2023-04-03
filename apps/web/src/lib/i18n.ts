@@ -25,12 +25,7 @@ i18n.loadLocaleData({
  * @param locale a supported locale string
  */
 export async function setLocale(locale: string) {
-  if (!supportedLocales.hasOwnProperty(locale)) {
-    locale = defaultLocale;
-  }
   localStorage.setItem(Localstorage.LocaleStore, JSON.stringify(locale));
-  const { messages } = import(`src/locales/${locale}/messages`);
-  i18n.load(locale, messages);
   i18n.activate(locale);
   dayjs.locale(locale);
 }
