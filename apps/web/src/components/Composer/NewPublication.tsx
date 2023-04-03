@@ -29,6 +29,7 @@ import {
   LIT_PROTOCOL_ENVIRONMENT
 } from 'data/constants';
 import Errors from 'data/errors';
+import { providers } from 'ethers';
 import type {
   CreatePublicCommentRequest,
   MetadataAttributeInput,
@@ -128,7 +129,7 @@ const NewPublication: FC<NewPublicationProps> = ({ publication }) => {
   const [loading, setLoading] = useState(false);
   const [publicationContentError, setPublicationContentError] = useState('');
   const [editor] = useLexicalComposerContext();
-  const provider = useProvider();
+  const getDefaultProvider = useProvider();
   const { data: signer } = useSigner();
 
   const isComment = Boolean(publication);
@@ -351,14 +352,16 @@ const NewPublication: FC<NewPublicationProps> = ({ publication }) => {
     }
 
     // Create the SDK instance
-    const tokenGatedSdk = await LensGatedSDK.create({
-      provider,
+    const tokenGatedSdk = LensGatedSDK.create({
+      providers,
       signer,
       env: LIT_PROTOCOL_ENVIRONMENT as any
     });
 
     // Connect to the SDK
-    await tokenGatedSdk.connect({
+    await (
+      await tokenGatedSdk
+    ).connect({
       address: currentProfile.ownedBy,
       env: LIT_PROTOCOL_ENVIRONMENT as any
     });
@@ -380,14 +383,11 @@ const NewPublication: FC<NewPublicationProps> = ({ publication }) => {
     }
 
     // Generate the encrypted metadata and upload it to Arweave
-    const { contentURI } = await tokenGatedSdk.gated.encryptMetadata(
-      metadata,
-      currentProfile.id,
-      accessCondition,
-      async (data: EncryptedMetadata) => {
-        return await uploadToArweave(data);
-      }
-    );
+   const { contentURI } = await (
+      await tokenGatedSdk
+    ).gated.encryptMetadata(metadata, currentProfile.id, accessCondition, async (data: EncryptedMetadata) => {
+      return await uploadToArweave(data);
+    });
 
     return contentURI;
   };
